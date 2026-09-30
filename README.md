@@ -36,12 +36,14 @@
 
     
 Respondan:    
-¿Dónde termina la responsabilidad de la plataforma logística y dónde comienzan   
-las responsabilidades de los sistemas externos?   
-R//: La plataforma se encarga de manejar todo lo relacionado con la entrega de los pedidos. Esto incluye asignar los pedidos a los conductores, permitirles ver y actualizar la información, 
-registrar cualquier problema que ocurra durante la entrega y guardar la evidencia cuando el pedido sea entregado. Por otro lado, el ERP se encarga de crear los pedidos y manejar la información comercial de la empresa. 
-El servicio de mapas se utiliza para todo lo relacionado con los mapas y la ubicación. 
-La plataforma simplemente se conecta con estos sistemas cuando necesita obtener o enviar información.
+¿Dónde termina la responsabilidad de la plataforma logística y dónde comienzan las responsabilidades de los sistemas externos?   
+
+R//: La responsabilidad de la plataforma logística termina en todo lo relacionado con la organización y seguimiento de las entregas, como asignar los pedidos, permitir que el conductor los consulte y actualice su estado, 
+registrar las novedades y guardar la evidencia de la entrega.
+
+La responsabilidad de los sistemas externos comienza cuando se necesita información o servicios que la plataforma no maneja directamente. El ERP se encarga de generar los pedidos y manejar la información comercial de la empresa, 
+mientras que el servicio de mapas se encarga de proporcionar la información relacionada con mapas y ubicación. La plataforma se comunica con estos sistemas para obtener o enviar la información que necesita.
+
 
 
 ## 2. C4 Nivel 1 - Contexto
