@@ -63,6 +63,12 @@ mientras que el servicio de mapas se encarga de proporcionar la información rel
             | Servicio de notificaciones    | Se encarga de las notificaciones relacionadas con los pedidos y las entregas.                                                                               | Funcionalidad interna del Backend/API. | El Backend/API             gestiona las notificaciones cuando ocurre alguna acción importante.            |
 
 
+Pregunta crítica
+¿Qué criterio utilizaron para decidir que un elemento debía ser un contenedor
+independiente?
+
+R//: Para decidir qué elementos serían contenedores independientes, tuvimos en cuenta la función que cumple cada uno y si era necesario separarlo de los demás para realizar su trabajo. Por eso elegimos la aplicación web administrativa, la aplicación para conductores, el Backend/API y la base de datos, ya que cada uno cumple una función diferente dentro de la plataforma. En el caso del seguimiento y las notificaciones, consideramos que por ahora pueden manejarse desde el Backend/API, porque no vemos necesario separarlos como servicios independientes para cumplir con lo que solicita el caso.
+
 ## 4. C4 Nivel 3 - Componentes
 ## 5. C4 Nivel 4 - Código
 ## 6. Uso y validación de IA
