@@ -47,6 +47,10 @@ mientras que el servicio de mapas se encarga de proporcionar la información rel
 
 
 ## 2. C4 Nivel 1 - Contexto
+
+![](Imagenes_C4/C4_Nivel_1.svg)
+
+
 ## 3. C4 Nivel 2 - Contenedores
 ## 4. C4 Nivel 3 - Componentes
 ## 5. C4 Nivel 4 - Código
