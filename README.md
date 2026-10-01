@@ -52,6 +52,17 @@ mientras que el servicio de mapas se encarga de proporcionar la información rel
 
 
 ## 3. C4 Nivel 2 - Contenedores
+
+            | Contenedor                    | Responsabilidad                                                                                                                                             | Tecnología propuesta                   | Comunicación                                                                                  |
+            | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- | ----------------            ----------------------------------------------------------------------------- |
+            | Aplicación web administrativa | Permite al coordinador gestionar los pedidos, asignar vehículos y conductores y revisar el estado de las entregas.                                          | Aplicación web (React).                | Se comunica con el Backend/API para enviar y consultar información.                           |
+            | Aplicación para conductores   | Permite consultar los pedidos asignados, actualizar su estado, registrar novedades y guardar las evidencias de entrega.                                     | Aplicación móvil (Flutter).            | Se comunica con el Backend/API para consultar y actualizar información.                       |
+            | Backend/API                   | Se encarga de procesar las solicitudes y manejar la lógica principal del sistema, como pedidos, asignaciones, entregas, novedades e integración con el ERP. | Java con Spring Boot.                  | Se comunica con las aplicaciones, la base de datos, el ERP y el servicio de mapas.            |
+            | Base de datos                 | Guarda la información de pedidos, vehículos, conductores, asignaciones, entregas, novedades y evidencias.                                                   | PostgreSQL.                            | Se comunica con el Backend/API, que consulta y guarda la información.                         |
+            | Servicio de seguimiento       | Permite manejar la información del estado y ubicación de las entregas.                                                                                      | Funcionalidad interna del Backend/API. | El Backend/API utiliza el servicio externo de mapas cuando necesita información de ubicación. |
+            | Servicio de notificaciones    | Se encarga de las notificaciones relacionadas con los pedidos y las entregas.                                                                               | Funcionalidad interna del Backend/API. | El Backend/API             gestiona las notificaciones cuando ocurre alguna acción importante.            |
+
+
 ## 4. C4 Nivel 3 - Componentes
 ## 5. C4 Nivel 4 - Código
 ## 6. Uso y validación de IA
