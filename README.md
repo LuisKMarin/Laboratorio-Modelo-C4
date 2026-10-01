@@ -62,6 +62,7 @@ mientras que el servicio de mapas se encarga de proporcionar la información rel
             | Servicio de seguimiento       | Permite manejar la información del estado y ubicación de las entregas.                                                                                      | Funcionalidad interna del Backend/API. | El Backend/API utiliza el servicio externo de mapas cuando necesita información de ubicación. |
             | Servicio de notificaciones    | Se encarga de las notificaciones relacionadas con los pedidos y las entregas.                                                                               | Funcionalidad interna del Backend/API. | El Backend/API             gestiona las notificaciones cuando ocurre alguna acción importante.            |
 
+![](Imagenes_C4/C4_Nivel_2.svg)
 
 Pregunta crítica
 ¿Qué criterio utilizaron para decidir que un elemento debía ser un contenedor
