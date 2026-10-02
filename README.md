@@ -2,6 +2,7 @@
 ## Integrantes
 - Luis Carlos Marín Mayo
 - Jorge Andrés Carvajal Sepúlveda
+- Nikole Herrera Ruiz
 ## 1. Comprensión del problema
 
             Elemento                                                        Decisión del equipo   
@@ -71,7 +72,67 @@ independiente?
 R//: Para decidir qué elementos serían contenedores independientes, tuvimos en cuenta la función que cumple cada uno y si era necesario separarlo de los demás para realizar su trabajo. Por eso elegimos la aplicación web administrativa, la aplicación para conductores, el Backend/API y la base de datos, ya que cada uno cumple una función diferente dentro de la plataforma. En el caso del seguimiento y las notificaciones, consideramos que por ahora pueden manejarse desde el Backend/API, porque no vemos necesario separarlos como servicios independientes para cumplir con lo que solicita el caso.
 
 ## 4. C4 Nivel 3 - Componentes
+
+| Componente         | Responsabilidad | Dependencias |
+|--------------------|---|---|
+| Gestión de pedidos | Mantener los pedidos disponibles para despacho y su estado. | Integración con ERP, Base de datos |
+| Gestión de asignaciones | Asignar un pedido preparado a un vehículo y a un conductor disponible. | Gestión de pedidos, Base de datos |
+| Gestión de entregas | Controlar las transiciones de estado (preparado, asignado, en ruta, entregado) y cerrar la entrega. | Gestión de pedidos, Evidencias de entrega, Notificaciones, Integración con ERP, Base de datos |
+| Gestión de novedades | Registrar las novedades que afectan una entrega (cliente ausente, dirección incorrecta, producto rechazado, vehículo averiado, entrega reprogramada). | Gestión de entregas, Notificaciones, Base de datos |
+| Evidencias de entrega | Guardar la fotografía, el nombre de quien recibe, las observaciones, la fecha y la hora de la entrega. | Base de datos |
+| Seguimiento | Manejar el estado y la ubicación de las entregas y atender la consulta del estado de un pedido. | Gestión de entregas, Integración con mapas, Base de datos |
+| Notificaciones | Avisar cuando ocurre un cambio importante en un pedido o en una entrega. | Ninguna dependencia interna |
+| Integración con ERP | Consultar los pedidos del ERP y reportarle las entregas realizadas. | ERP (sistema externo) |
+| Integración con mapas | Consultar mapas y geolocalización. | Servicio externo de mapas (sistema externo) |
+
+![](Imagenes_C4/C4_Nivel_3.svg)
+
 ## 5. C4 Nivel 4 - Código
+
+**Gestión de entregas** (Backend/API). Se eligió porque concentra las reglas de negocio más importantes del proceso (transiciones de estado y cierre de la entrega) y es el componente que más se relaciona con los demás.
+
+**Responsabilidad definida en el Nivel 3:** controlar las transiciones de estado (preparado, asignado, en ruta, entregado) y cerrar la entrega.
+
+**Dependencias definidas en el Nivel 3:** Gestión de pedidos, Evidencias de entrega, Notificaciones, Integración con ERP y Base de datos.
+
+
+| Elemento de código | Tipo | Responsabilidad | Relación principal |
+|---|---|---|---|
+| EntregaController | Controlador REST | Recibir las solicitudes de la aplicación para conductores (actualizar estado, cerrar entrega, consultar estado) y delegarlas al servicio. | Usa EntregaService |
+| EntregaService | Servicio | Coordinar el caso de uso: validar la transición, guardar la entrega y avisar a los demás componentes. | Usa EntregaRepository y los cuatro puertos |
+| Entrega | Entidad | Representar una entrega y proteger sus reglas: solo cambia de estado si la transición es válida. | Tiene un EstadoEntrega |
+| EstadoEntrega | Enumeración | Definir los estados (PREPARADO, ASIGNADO, EN_RUTA, ENTREGADO) y qué transiciones están permitidas. | Usada por Entrega |
+| TransicionInvalidaException | Excepción | Señalar un intento de cambio de estado no permitido. | La lanza Entrega |
+| CambioEstadoRequest | Objeto de transferencia (DTO) | Llevar el nuevo estado solicitado por la aplicación. | Lo recibe EntregaController |
+| CierreEntregaRequest | Objeto de transferencia (DTO) | Llevar los datos del cierre: fotografía, nombre de quien recibe, observaciones, fecha y hora. | Lo recibe EntregaController |
+| EntregaRepository | Interfaz (repositorio) | Guardar y consultar entregas en la base de datos. | Implementada con PostgreSQL |
+| PedidoPort | Interfaz (puerto) | Pedir a Gestión de pedidos que actualice el estado del pedido. | La implementa el componente Gestión de pedidos |
+| EvidenciaPort | Interfaz (puerto) | Pedir a Evidencias de entrega que guarde la evidencia al cerrar. | La implementa el componente Evidencias de entrega |
+| NotificacionPort | Interfaz (puerto) | Pedir a Notificaciones que avise del cambio de estado. | La implementa el componente Notificaciones |
+| ErpPort | Interfaz (puerto) | Pedir a Integración con ERP que reporte la entrega realizada. | La implementa el componente Integración con ERP |
+
+*Nota:* los estados PREPARADO y ASIGNADO los fija Gestión de asignaciones a través de Gestión de pedidos; este componente controla el avance desde ASIGNADO hasta ENTREGADO, pero el enum incluye todos los estados para validar las transiciones con un solo criterio.
+
+### Pregunta crítica
+
+**¿Cómo se evidencia que las clases diseñadas realmente implementan la responsabilidad definida previamente en el componente?**
+
+R//: Se evidencia con la trazabilidad entre el Nivel 3 y el Nivel 4: cada responsabilidad y cada dependencia del componente Gestión de entregas tiene un elemento de código que la implementa, y ningún elemento de código existe sin una responsabilidad que lo justifique. La responsabilidad principal del componente (controlar las transiciones de estado y cerrar la entrega) se materializa en `EstadoEntrega`, `Entrega` y `EntregaService`. Las dependencias del Nivel 3 (pedidos, evidencias, notificaciones, ERP y base de datos) se materializan en interfaces (`PedidoPort`, `EvidenciaPort`, `NotificacionPort`, `ErpPort` y `EntregaRepository`), de modo que el componente solo depende de contratos y no de las clases internas de los demás componentes.
+
+| Responsabilidad o dependencia del componente (Nivel 3) | Elemento de código que la implementa (Nivel 4) |
+|---|---|
+| Controlar las transiciones de estado | `EstadoEntrega.puedePasarA()`, `Entrega.avanzarA()` y `EntregaService.actualizarEstado()` |
+| Cerrar la entrega | `EntregaService.cerrarEntrega()` y `Entrega.cerrar()` |
+| Recibir solicitudes de la aplicación para conductores | `EntregaController` |
+| Responder a Seguimiento, que lee el estado | `EntregaService.consultarEstado()` |
+| Responder a Gestión de novedades, que afecta el estado | `EntregaService.actualizarEstado()` |
+| Dependencia: Gestión de pedidos | `PedidoPort` |
+| Dependencia: Evidencias de entrega | `EvidenciaPort` |
+| Dependencia: Notificaciones | `NotificacionPort` |
+| Dependencia: Integración con ERP | `ErpPort` |
+| Dependencia: Base de datos | `EntregaRepository` |
+
+![](Imagenes_C4/C4_Nivel_4.svg)
 ## 6. Uso y validación de IA
 ## 7. Auditoría de coherencia
 ## 8. Conclusiones
