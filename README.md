@@ -153,8 +153,47 @@ R//: Se evidencia con la trazabilidad entre el Nivel 3 y el Nivel 4: cada respon
             No reconstruyas el modelo completo. Actúa como revisor arquitectónico y explica cada hallazgo.
 
 ### Observaciones generadas por la IA
-...
+
+            Observación 1. Diferencia en la responsabilidad de Gestión de entregas
+            
+            En el Nivel 3, Gestión de entregas aparece como responsable de controlar todos los cambios de estado, desde preparado hasta entregado. Sin embargo, en el Nivel 4 se aclara que este componente solamente controla el avance desde asignado hasta entregado, mientras que los estados anteriores son manejados por Gestión de asignaciones y Gestión de pedidos.
+            
+            Esto genera una pequeña inconsistencia entre la responsabilidad definida y lo que realmente implementa el componente. Se recomienda aclarar el alcance de Gestión de entregas para que quede claro desde qué momento comienza su responsabilidad y evitar que se confunda con las funciones de los otros componentes.
+            
+            Observación 2. Posible cruce de responsabilidades entre Seguimiento y Gestión de entregas
+            
+            En el Nivel 3, el componente Seguimiento se encarga de manejar el estado y la ubicación de las entregas, además de atender las consultas del estado de un pedido. Sin embargo, en el Nivel 4, EntregaService también aparece encargado de consultar el estado de las entregas mediante el método consultarEstado().
+            
+            Aunque ambos componentes pueden colaborar, no queda completamente claro cuál es el responsable de atender las consultas de seguimiento, lo que podría generar duplicación de responsabilidades.
+            
+            Se recomienda diferenciar mejor estas funciones, dejando que Gestión de entregas se encargue de actualizar los estados y que Seguimiento se encargue de consultar y mostrar esa información.
+            
+            Observación 3. Dependencia de Gestión de entregas con la integración ERP
+            
+            En el Nivel 3, Gestión de entregas depende directamente de Integración con ERP. En el Nivel 4, esta relación se representa mediante ErpPort, utilizado para reportar la entrega realizada.
+            
+            La dependencia está identificada, pero se podría separar mejor la responsabilidad de cerrar una entrega de la responsabilidad de comunicar posteriormente ese resultado al ERP. De lo contrario, un problema de comunicación con el ERP podría afectar el proceso de cierre.
+            
+            Se recomienda que el registro de una entrega completada no dependa directamente de que el ERP responda en ese mismo momento, manteniendo separadas ambas responsabilidades.
+            
+            Observación 4. Inconsistencia en las dependencias del componente Notificaciones
+            
+            En el Nivel 3, el componente Notificaciones aparece con la indicación de que no tiene dependencias internas. Sin embargo, Gestión de entregas y Gestión de novedades sí lo tienen como una de sus dependencias.
+            
+            Además, en el Nivel 4 se define NotificacionPort, que permite a EntregaService solicitar el envío de notificaciones cuando ocurre un cambio de estado.
+            
+            Esto genera una inconsistencia en la forma en que se representan las relaciones entre los componentes. Se recomienda revisar la dependencia de Notificaciones y aclarar cómo recibe las solicitudes de los demás componentes para que las relaciones del Nivel 3 coincidan con las del Nivel 4.
+            
+            Observación 5. Seguimiento y notificaciones representados como contenedores independientes
+            
+            En el Nivel 2 se incluyen Servicio de seguimiento y Servicio de notificaciones como elementos de la arquitectura. Sin embargo, en la tabla se indica que ambos son funcionalidades internas del Backend/API y no servicios independientes.
+            
+            Esto puede generar confusión porque se están mostrando como contenedores separados, aunque su propia descripción indica que forman parte del Backend/API.
+            
+            Se recomienda aclarar que estas funcionalidades se encuentran dentro del Backend/API y que, por ahora, no necesitan ser contenedores independientes. Esto también permitiría mantener una mejor relación entre el Nivel 2 y el Nivel 3, donde Seguimiento y Notificaciones aparecen como componentes.
+            
 ### Evaluación del equipo  
+
             | Observación de la IA                                      | ¿Se acepta? |                   Justificación del equipo                    |
             |-----------------------------------------------------------|-------------|---------------------------------------------------------------|
             |En el Nivel 3, Gestión de entregas aparece como responsable|             |                                                               |
