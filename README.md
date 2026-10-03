@@ -134,5 +134,31 @@ R//: Se evidencia con la trazabilidad entre el Nivel 3 y el Nivel 4: cada respon
 
 ![](Imagenes_C4/C4_Nivel_4.svg)
 ## 6. Uso y validación de IA
+### Prompt utilizado
+
+            Estamos desarrollando un modelo C4 de una plataforma logística.
+            Hemos construido los cuatro niveles:
+            1. Contexto
+            2. Contenedores
+            3. Componentes
+            4. Código
+            Revisa nuestro modelo y señala:
+            - Elementos ubicados en un nivel incorrecto.
+            - Inconsistencias entre niveles.
+            - Responsabilidades mal definidas.
+            - Componentes que parecen clases.
+            - Clases que no corresponden al componente seleccionado.
+            - Dependencias innecesarias.
+            - Posibles problemas de separación de responsabilidades.
+            No reconstruyas el modelo completo. Actúa como revisor arquitectónico y explica cada hallazgo.
+
+### Observaciones generadas por la IA
+...
+### Evaluación del equipo  
+            Observación de la IA              |                  ¿Se acepta?                 |              Justificación del equipo
+    ----------------------------------------------------------------------------------------------------------------------------------------------
+                                                
+            
+
 ## 7. Auditoría de coherencia
 ## 8. Conclusiones
