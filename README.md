@@ -155,10 +155,40 @@ R//: Se evidencia con la trazabilidad entre el Nivel 3 y el Nivel 4: cada respon
 ### Observaciones generadas por la IA
 ...
 ### Evaluación del equipo  
-            Observación de la IA              |                  ¿Se acepta?                 |              Justificación del equipo
-    ----------------------------------------------------------------------------------------------------------------------------------------------
-                                                
-            
+            | Observación de la IA                                      | ¿Se acepta? |                   Justificación del equipo                    |
+            |-----------------------------------------------------------|-------------|---------------------------------------------------------------|
+            |En el Nivel 3, Gestión de entregas aparece como responsable|             |                                                               |
+            | de controlar todos los cambios de estado, desde           |             |                                                               |
+            | preparado hasta entregado. Sin embargo, en el Nivel 4 se  |             |                                                               |
+            | aclara que este componente solamente controla el avance   |     Si      |  Estamos de acuerdo porque al revisar nuestros diagramas      |
+            | desde asignado hasta entregado, mientras que los estados  |             | vimos que no estaba muy clara la responsabilidad de este      |
+            | anteriores son manejados por Gestión de asignaciones y    |             | componente. En una parte parecia encargarse de todo el        |
+            | Gestión de pedidos.                                       |             | proceso y en otra solamente desde que el pedido ya esta       |
+            | Esto genera una pequeña inconsistencia entre la           |             | asignado. Por eso creemos que es necesario aclararlo para     |
+            | responsabilidad definida y lo que realmente implementa    |             | que cada componente tenga su funcion bien definida.           |
+            | el componente.                                            |             |                                                               |
+            |-----------------------------------------------------------|-------------|---------------------------------------------------------------|
+            | En el Nivel 3, el componente Seguimiento se encarga de    |             |                                                               |
+            | manejar el estado y atender las consultas del pedido.     |             |                                                               |
+            | Sin embargo, en el Nivel 4, EntregaService también        |             |                                                               |
+            | aparece encargado de consultar el estado de las           |   Parcial   | Consideramos que los dos componentes si necesitan trabajar    |
+            | entregas. Aunque ambos componentes pueden colaborar,      |             | con los estados de los pedidos, pero no deberian hacer        |
+            | no queda completamente claro cuál es el responsable de    |             | exactamente lo mismo. Gestion de entregas debe encargarse     |
+            | atender las consultas de seguimiento, lo que podría       |             | de actualizar los estados y seguimiento de mostrar esa        |
+            | generar duplicación de responsabilidades.                 |             | informacion cuando alguien consulte el pedido. Por eso        |
+            |                                                           |             | creemos que solo hace falta dejar mas claras sus funciones.   |
+            |-----------------------------------------------------------|-------------|---------------------------------------------------------------|
+            | En el Nivel 3, Gestión de entregas depende directamente   |             |                                                               |
+            | de Integración con ERP. En el Nivel 4, esta relación se   |             |                                                               |
+            | representa mediante ErpPort, utilizado para reportar la   |             |                                                               |
+            | entrega realizada. La dependencia está identificada,      |   Parcial   | Estamos de acuerdo en que la comunicacion con el ERP es       |
+            | pero se podría separar mejor la responsabilidad de cerrar |             | necesaria porque debemos enviar la informacion de las         |
+            | una entrega de la responsabilidad de comunicar            |             | entregas realizadas. Sin embargo, creemos que eso no deberia  |
+            | posteriormente ese resultado al ERP. De lo contrario,     |             | impedir que la plataforma registre una entrega cuando el      |
+            | un problema de comunicación con el ERP podría afectar     |             | ERP tenga algun problema. Por eso consideramos que ambas      |
+            | el proceso de cierre.                                     |             | funciones deben estar separadas para que el proceso pueda     |
+            |                                                           |             | continuar normalmente.                                        |
+            |-----------------------------------------------------------|-------------|---------------------------------------------------------------|
 
 ## 7. Auditoría de coherencia
 ## 8. Conclusiones
