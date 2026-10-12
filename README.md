@@ -230,4 +230,15 @@ R//: Se evidencia con la trazabilidad entre el Nivel 3 y el Nivel 4: cada respon
             |-----------------------------------------------------------|-------------|---------------------------------------------------------------|
 
 ## 7. Auditoría de coherencia
+
+El grupo 3 que debia hacernos la AUDITORIA, no nos la realizo y por ende este punto no pudo ser completado
+
 ## 8. Conclusiones
+
+1. Con este trabajo entendimos que cada nivel del modelo C4 muestra una parte diferente del sistema. El sistema representa toda la plataforma logística; los contenedores son sus partes principales, como el Backend y las aplicaciones; los componentes representan las funciones que tiene cada parte, y el nivel de código muestra cómo se pueden implementar esas funciones mediante clases, servicios e interfaces.
+
+2. La mayor dificultad la tuvimos al pasar del nivel de componentes al nivel de código, porque debíamos relacionar las funciones que habíamos definido con elementos concretos. Esto se vio principalmente en Gestión de entregas, donde tuvimos que identificar qué elementos se encargan de controlar los estados, cerrar la entrega y comunicarse con los demás componentes.
+
+3. De las observaciones de la IA, aceptamos la primera porque nos ayudó a identificar que no estaba suficientemente claro desde qué estado comenzaba la responsabilidad de Gestión de entregas. Las otras dos las aceptamos parcialmente, ya que estamos de acuerdo en que Seguimiento y Gestión de entregas deben tener funciones diferentes y que cerrar una entrega no debería depender de que el ERP responda en ese momento. Sin embargo, consideramos que ambos componentes deben seguir trabajando juntos y que la plataforma debe comunicar al ERP las entregas realizadas.
+
+4. La coherencia entre los niveles se evidencia al relacionar las responsabilidades definidas en los componentes con los elementos de código que las llevan a cabo. Por ejemplo, Gestión de entregas se representa en el nivel de código mediante `EntregaService`, `Entrega` y `EstadoEntrega`, mientras que sus dependencias se representan mediante interfaces como `PedidoPort`, `EvidenciaPort` y `ErpPort`. A pesar de esto, la revisión con IA nos permitió identificar algunos aspectos que debemos aclarar para que las responsabilidades estén mejor definidas y los niveles coincidan correctamente.
